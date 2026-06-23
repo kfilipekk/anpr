@@ -3,7 +3,7 @@
  *
  * upload_task (Core 1): dequeues frames and POSTs them to Plate Recogniser, saves frames to SD card if Wi-Fi fails.
  *
- * retry_task (Core 1): rains pending SD files asynchronously when Wi-Fi restores.
+ * retry_task (Core 1): drains pending SD files asynchronously when Wi-Fi restores.
 */
 
 #include "anpr_config.h"
@@ -88,6 +88,7 @@ static void upload_task(void *arg)
                     ESP_LOGI(TAG, "Plate: [%s] (%.2f)", res.plate_text, res.confidence);
                     char buf[128];
                     snprintf(buf, sizeof(buf), "{\"plate\":\"%s\",\"conf\":%.2f}", res.plate_text, res.confidence);
+                    vTaskDelay(pdMS_TO_TICKS(100));
                     esc_mqtt_publish(1, 1, strlen(buf), (uint8_t *)buf);
                 }
             } else {
@@ -109,7 +110,9 @@ static void upload_task(void *arg)
 //ENTRY POINT
 void anpr_start(void)
 {
+    vTaskDelay(pdMS_TO_TICKS(500));
     ESP_LOGI(TAG, "ANPR SmartConnect Node-starting");
+    printf("[SHW][ANPR]: Task startup\n");
 
     //SD
     esp_err_t ret = sd_logger_init();
