@@ -4,5 +4,3 @@ sdkconfig.old
 .DS_Store
 *.swp
 .vscode/
-lidar.h
-lidar.c
