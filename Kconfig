@@ -1,0 +1,111 @@
+menu "ANPR Configuration"
+
+    menu "WiFi"
+
+        config ANPR_WIFI_SSID
+            string "WiFi SSID"
+            default "your_wifi_ssid"
+            help
+                ssid of the 2.4 ghz wifi network
+
+        config ANPR_WIFI_PASSWORD
+            string "WiFi Password"
+            default "your_wifi_password"
+            help
+                wpa2 password for the wifi network
+
+        config ANPR_WIFI_MAX_RETRY
+            int "Maximum WiFi reconnect attempts before cooldown"
+            default 10
+            help
+                reconnect attempts before cooldown
+
+    endmenu
+
+    menu "Plate Recognizer API"
+
+        config ANPR_PLATE_TOKEN
+            string "API token"
+            default "your_platerecognizer_token"
+            help
+                token from https://app.platerecognizer.com/token/
+
+        config ANPR_PLATE_REGION
+            string "Region hint (ISO 3166-2)"
+            default "gb"
+            help
+                biases the ocr model toward a regional plate format
+
+        config ANPR_PLATE_API_URL
+            string "API endpoint URL"
+            default "https://api.platerecognizer.com/v1/plate-reader/"
+            help
+                change only if using a self-hosted snapshot instance
+
+        config ANPR_PLATE_TIMEOUT_MS
+            int "HTTP request timeout (ms)"
+            default 10000
+            help
+                maximum time to wait for a response from the cloud api
+
+    endmenu
+
+    menu "TF-Luna LiDAR"
+
+        config ANPR_LIDAR_TX_GPIO
+            int "UART TX GPIO (ESP → LiDAR RX)"
+            default 3
+            help
+                gpio for uart1 tx output
+
+        config ANPR_LIDAR_RX_GPIO
+            int "UART RX GPIO (LiDAR TX → ESP)"
+            default 4
+            help
+                gpio for uart1 rx input
+
+        config ANPR_LIDAR_THRESHOLD_CM
+            int "Detection distance threshold (cm)"
+            default 300
+            help
+                lidar reading below this value triggers a capture
+
+        config ANPR_LIDAR_MIN_AMPLITUDE
+            int "Minimum signal amplitude for valid reading"
+            default 100
+            help
+                minimum signal amplitude for valid reading
+
+    endmenu
+
+    menu "Camera"
+
+        config ANPR_CAMERA_JPEG_QUALITY
+            int "JPEG quality (0=best … 63=worst)"
+            default 12
+            help
+                lower values produce larger, sharper images
+
+        config ANPR_CAMERA_WARMUP_MS
+            int "Camera warmup delay after trigger (ms)"
+            default 100
+            help
+                time to wait after trigger before capturing
+
+    endmenu
+
+    menu "SD Card Logger"
+
+        config ANPR_SD_CS_GPIO
+            int "SD card SPI CS GPIO"
+            default 21
+            help
+                chip-select pin for the microsd
+
+        config ANPR_SD_MOUNT_POINT
+            string "VFS mount point"
+            default "/sdcard"
+
+    endmenu
+
+endmenu
